@@ -1,0 +1,15 @@
+{
+  "brand": "多品牌",
+  "model": "儿童安全座椅",
+  "category": "母婴健身乐器",
+  "updated_at": "2026-10-25",
+  "sample_count": 9,
+  "time_span_days": 1,
+  "personal_median": 80,
+  "overall_median": 80,
+  "p25": 50,
+  "p75": 100,
+  "fair_price_range": [50, 100],
+  "status": "insufficient",
+  "notes": "个人闲置多为自提，成交价普遍在45–100；商家清仓全新399为异常高样本"
+}

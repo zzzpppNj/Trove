@@ -1,0 +1,3 @@
+interface:
+  display_name: "二手谈价"
+  short_description: "生成口语化的二手交易谈价话术，结合行情分析辅助砍价"

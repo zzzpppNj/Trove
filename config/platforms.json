@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "active_platform": "xianyu",
+  "platforms": [
+    {
+      "id": "xianyu",
+      "name": "闲鱼",
+      "enabled": true,
+      "default": true,
+      "home_url": "https://www.goofish.com/",
+      "search_url_template": "https://www.goofish.com/search?q={keyword}",
+      "item_url_prefix": "https://www.goofish.com/item?id=",
+      "auth_mode": "reuse-existing-page",
+      "login_note": "接管用户浏览器里已登录的闲鱼标签页，不新开页面",
+      "default_filters": ["个人闲置"],
+      "currency": "CNY",
+      "notes": "只浏览记录，不付款、不下单；优先平台内交易"
+    }
+  ]
+}

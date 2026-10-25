@@ -1,0 +1,15 @@
+{
+  "brand": "任天堂",
+  "model": "Switch Sports",
+  "category": "图书绘本游戏卡带",
+  "updated_at": "2026-10-25",
+  "sample_count": 4,
+  "time_span_days": 1,
+  "personal_median": 175,
+  "overall_median": 175,
+  "p25": 175,
+  "p75": 189,
+  "fair_price_range": [175, 189],
+  "status": "insufficient",
+  "notes": "参考区间155–180，全新日版样本集中在170–189"
+}

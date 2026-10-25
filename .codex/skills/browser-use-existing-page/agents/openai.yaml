@@ -1,0 +1,3 @@
+interface:
+  display_name: "browser-use 已打开网页采集"
+  short_description: "接管已打开网页标签页进行浏览与数据采集"
