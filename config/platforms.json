@@ -1,6 +1,10 @@
 {
   "version": 1,
   "active_platform": "xianyu",
+  "user": {
+    "city": "合肥",
+    "province": "安徽"
+  },
   "platforms": [
     {
       "id": "xianyu",

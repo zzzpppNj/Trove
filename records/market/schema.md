@@ -28,7 +28,7 @@
 | seller_type | string | personal / suspected_reseller / unknown |
 | region | string | 地区 |
 | url | string | 商品链接 |
-| face_to_face | boolean | 是否支持面交 |
+| face_to_face | boolean | 是否支持面交（仅限用户所在城市合肥） |
 | platform_inspection | boolean | 是否支持平台验货/验机（如闲鱼验机） |
 | flags | string[] | 标记，如“疑似矿卡”“来源不清”“低于行情” |
 | notes | string | 备注 |
