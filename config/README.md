@@ -23,3 +23,7 @@ Trove 的数据源平台由 `platforms.json` 配置，不在代码里写死。
 2. 把 `active_platform` 切到新 id，或让采集时按需选择平台。
 3. 在 `records/market/schema.md` 里确认该 id 可作为 `source` 取值。
 4. 采集时用 `browser-use-existing-page` 接管该平台已登录的页面。
+
+## 定价参数（pricing.json）
+
+`pricing.json` 维护每个盯盘型号的 `reference_price`（参考价区间）、`good_price_line`（好价线）、`risk_tier`（风险档）与 `frequency`（采集频率）。这些值会随行情低频波动，更新时直接改该文件并 `updated_at`，不必改动采集逻辑或 watchlist。

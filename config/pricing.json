@@ -1,0 +1,54 @@
+{
+  "updated_at": "2026-10-26",
+  "items": [
+    {
+      "model": "塞尔达传说 旷野之息",
+      "category": "图书绘本游戏卡带",
+      "reference_price": { "min": 170, "max": 233 },
+      "good_price_line": 170,
+      "risk_tier": "safe",
+      "frequency": "high"
+    },
+    {
+      "model": "Switch Sports",
+      "category": "图书绘本游戏卡带",
+      "reference_price": { "min": 155, "max": 180 },
+      "good_price_line": 160,
+      "risk_tier": "safe",
+      "frequency": "high"
+    },
+    {
+      "model": "女神异闻录5 皇家版",
+      "category": "图书绘本游戏卡带",
+      "reference_price": { "min": 135, "max": 135 },
+      "good_price_line": 125,
+      "risk_tier": "safe",
+      "frequency": "high"
+    },
+    {
+      "model": "冷门卡",
+      "category": "图书绘本游戏卡带",
+      "reference_price": { "min": 40, "max": 65 },
+      "good_price_line": 45,
+      "risk_tier": "safe",
+      "frequency": "high",
+      "notes": "待补具体游戏名"
+    },
+    {
+      "model": "儿童安全座椅",
+      "category": "母婴健身乐器",
+      "reference_price": { "min": 0, "max": 1000 },
+      "good_price_line": 45,
+      "risk_tier": "medium",
+      "frequency": "low"
+    },
+    {
+      "model": "婴儿推车 / 遛娃神器",
+      "category": "母婴健身乐器",
+      "reference_price": { "min": 0, "max": 1000 },
+      "good_price_line": 25,
+      "risk_tier": "medium",
+      "frequency": "low"
+    }
+  ]
+}
