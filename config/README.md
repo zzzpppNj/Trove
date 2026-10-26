@@ -27,3 +27,5 @@ Trove 的数据源平台由 `platforms.json` 配置，不在代码里写死。
 ## 定价参数（pricing.json）
 
 `pricing.json` 维护每个盯盘型号的 `reference_price`（参考价区间）、`good_price_line`（好价线）、`risk_tier`（风险档）与 `frequency`（采集频率）。这些值会随行情低频波动，更新时直接改该文件并 `updated_at`，不必改动采集逻辑或 watchlist。
+
+周度自动更新：每周日 22:00 运行 `scripts/update_pricing.py`，读取最近 30 天 `records/market/*.json`，按风险档门槛（样本数与观察天数）用个人卖家样本的 P25/P75 更新参考价、用 P25 更新好价线；样本不足则保持原值。

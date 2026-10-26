@@ -37,6 +37,7 @@
     {
       "model": "儿童安全座椅",
       "category": "母婴健身乐器",
+      "aliases": ["儿童安全座椅", "婴儿提篮安全座椅"],
       "reference_price": { "min": 0, "max": 1000 },
       "good_price_line": 45,
       "risk_tier": "medium",
@@ -45,6 +46,7 @@
     {
       "model": "婴儿推车 / 遛娃神器",
       "category": "母婴健身乐器",
+      "aliases": ["婴儿推车", "遛娃神器"],
       "reference_price": { "min": 0, "max": 1000 },
       "good_price_line": 25,
       "risk_tier": "medium",
