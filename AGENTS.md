@@ -54,6 +54,7 @@
 - 每次谈价在 `records/negotiation/` 留档，记录卖家、报价、让步与承诺。
 - 成交后在 `records/deals/` 留档，参考 `templates/deal-record.md`。
 - 每日选品数据以 `records/market/YYYY-MM-DD.json` 落盘，字段见 `records/market/schema.md`；聚合结果写 `records/market/stats/`。
+- 每次成功采集并落盘后，自动 `git add -A && git commit`（提交信息形如 `chore: 采集 YYYY-MM-DD`）；采集失败或无新数据则跳过提交。
 - 文件名建议用 `YYYY-MM-DD-主题.md`；涉及隐私的信息做脱敏处理。
 
 ## 沟通风格
