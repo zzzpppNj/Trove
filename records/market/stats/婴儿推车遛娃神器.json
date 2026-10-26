@@ -3,13 +3,13 @@
   "model": "婴儿推车 / 遛娃神器",
   "category": "母婴健身乐器",
   "updated_at": "2026-10-25",
-  "sample_count": 7,
-  "time_span_days": 1,
-  "personal_median": 50,
-  "overall_median": 50,
-  "p25": 40,
-  "p75": 55,
-  "fair_price_range": [40, 55],
+  "sample_count": 13,
+  "time_span_days": 2,
+  "personal_median": 30,
+  "overall_median": 30,
+  "p25": 25,
+  "p75": 49,
+  "fair_price_range": [25, 49],
   "status": "insufficient",
-  "notes": "以同城自提为主，主力价位40–55，凤凰遛娃神器220为高配样本"
+  "notes": "两日累计13条，仍不足20；以同城自提为主，主力价位20–50"
 }

@@ -3,13 +3,13 @@
   "model": "女神异闻录5 皇家版",
   "category": "图书绘本游戏卡带",
   "updated_at": "2026-10-25",
-  "sample_count": 6,
-  "time_span_days": 1,
+  "sample_count": 11,
+  "time_span_days": 2,
   "personal_median": 130,
-  "overall_median": 133,
-  "p25": 119,
-  "p75": 139,
-  "fair_price_range": [119, 139],
+  "overall_median": 130,
+  "p25": 130,
+  "p75": 135,
+  "fair_price_range": [120, 135],
   "status": "insufficient",
-  "notes": "参考价135，二手个人样本集中在108–140"
+  "notes": "两日累计11条；个人闲置120–135，参考价135，接近底部"
 }

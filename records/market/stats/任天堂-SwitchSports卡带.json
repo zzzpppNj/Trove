@@ -3,13 +3,13 @@
   "model": "Switch Sports",
   "category": "图书绘本游戏卡带",
   "updated_at": "2026-10-25",
-  "sample_count": 4,
-  "time_span_days": 1,
-  "personal_median": 175,
-  "overall_median": 175,
-  "p25": 175,
-  "p75": 189,
-  "fair_price_range": [175, 189],
+  "sample_count": 9,
+  "time_span_days": 2,
+  "personal_median": 166,
+  "overall_median": 166,
+  "p25": 160,
+  "p75": 168,
+  "fair_price_range": [160, 168],
   "status": "insufficient",
-  "notes": "参考区间155–180，全新日版样本集中在170–189"
+  "notes": "两日累计9条；今日个人闲置150–166，全新未拆170–189，参考区间155–180"
 }
