@@ -2,14 +2,14 @@
   "brand": "多品牌",
   "model": "婴儿推车 / 遛娃神器",
   "category": "母婴健身乐器",
-  "updated_at": "2026-10-25",
-  "sample_count": 13,
-  "time_span_days": 2,
-  "personal_median": 30,
-  "overall_median": 30,
-  "p25": 25,
-  "p75": 49,
-  "fair_price_range": [25, 49],
+  "updated_at": "2026-10-27",
+  "sample_count": 14,
+  "time_span_days": 3,
+  "personal_median": 50,
+  "overall_median": 50,
+  "p25": 31,
+  "p75": 50,
+  "fair_price_range": [31, 50],
   "status": "insufficient",
-  "notes": "两日累计13条，仍不足20；以同城自提为主，主力价位20–50"
+  "notes": "三日累计14条，仍不足20且观察<14天；同城仅保留合肥"
 }

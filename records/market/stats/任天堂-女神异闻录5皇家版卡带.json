@@ -2,14 +2,14 @@
   "brand": "任天堂",
   "model": "女神异闻录5 皇家版",
   "category": "图书绘本游戏卡带",
-  "updated_at": "2026-10-25",
-  "sample_count": 11,
-  "time_span_days": 2,
-  "personal_median": 130,
-  "overall_median": 130,
-  "p25": 130,
+  "updated_at": "2026-10-27",
+  "sample_count": 27,
+  "time_span_days": 3,
+  "personal_median": 128,
+  "overall_median": 128,
+  "p25": 122,
   "p75": 135,
-  "fair_price_range": [120, 135],
-  "status": "insufficient",
-  "notes": "两日累计11条；个人闲置120–135，参考价135，接近底部"
+  "fair_price_range": [122, 135],
+  "status": "ready",
+  "notes": "三日累计27条，个人中位128；样本≥15，解锁谈价"
 }

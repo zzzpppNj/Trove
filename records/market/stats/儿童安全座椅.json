@@ -2,14 +2,14 @@
   "brand": "多品牌",
   "model": "儿童安全座椅",
   "category": "母婴健身乐器",
-  "updated_at": "2026-10-25",
+  "updated_at": "2026-10-27",
   "sample_count": 15,
-  "time_span_days": 2,
+  "time_span_days": 3,
   "personal_median": 65,
   "overall_median": 65,
   "p25": 50,
-  "p75": 88,
-  "fair_price_range": [50, 88],
+  "p75": 96,
+  "fair_price_range": [50, 96],
   "status": "insufficient",
-  "notes": "两日累计15条，仍不足20；个人闲置以同城自提为主，20–99为主力区间"
+  "notes": "三日累计15条，仍不足20且观察<14天；同城仅保留合肥"
 }
