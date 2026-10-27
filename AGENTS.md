@@ -13,7 +13,7 @@
 1. **每日选品采集**：按 watchlist 在当前启用平台（默认闲鱼）搜索，套用 `secondhand-buying-guide` 的品类与风险判断，并用卖家识别给每条打 `seller_type` 标、记录 `source` 为平台 id；结果按 `records/market/YYYY-MM-DD.json` 落盘；单件单价默认千元以内。
 2. **聚合**：按“品牌 + 型号”算样本数、中位数、四分位区间与趋势；剔除疑似矿卡/问题机/来源不清的异常值，产出“好价清单”（挂牌价低于公允区间下限）。
 3. **门槛判定**：只有某型号样本达标才解锁该型号的谈价（见下方门槛表）。
-4. **谈价**：对通过“好价 + 风险”筛选的具体 listing，用 `price-negotiation` 生成口语化话术，记录到 `records/negotiation/`。
+4. **谈价**：对通过“好价 + 风险”筛选的具体 listing，先实时复核是否在售、价格和关键描述，再用 `price-negotiation` 建立独立档案并生成口语化话术。每条对外消息发送前展示原文并取得用户当轮确认；发送后按 skill 的状态机持续跟踪，只在有卖家回复、改价、下架/售出或需要用户决定时更新档案并提醒。
 5. **交接**：汇总候选、推荐排序与理由，交用户拍板；付款、下单、填写收货地址、确认收货、退款、售后一律由用户本人完成，成交记 `records/deals/`。
 
 ### 解锁谈价的门槛（按型号）
@@ -38,7 +38,7 @@
 ## 项目技能
 
 - `secondhand-buying-guide`：选品与规避风险（品类、卖家识别、验货验机、骗局）。
-- `price-negotiation`：谈价话术与砍价。
+- `price-negotiation`：谈价话术、报价边界、状态机与长时间回复追踪；状态变更优先运行 `.codex/skills/price-negotiation/scripts/negotiation_state.py`。
 - `browser-use-existing-page`：用 Codex browser-use 接管当前平台已登录的标签页进行浏览与采集（不新开页面）。
 
 以上均为本项目自动发现的 skill，按需调用；细节以各 `SKILL.md` 与 `references/` 为准，不在本文件重复。
@@ -60,7 +60,7 @@
 ## 记录规范
 
 - 每次搜索在 `records/search/` 留档，参考 `templates/search-checklist.md`。
-- 每次谈价在 `records/negotiation/` 留档，记录卖家、报价、让步与承诺。
+- 每次谈价在 `records/negotiation/` 留档，使用 `templates/negotiation-record.md`，记录卖家、报价、让步、承诺和统一状态；修改状态后运行状态脚本校验。
 - 成交后在 `records/deals/` 留档，参考 `templates/deal-record.md`。
 - 每日选品数据以 `records/market/YYYY-MM-DD.json` 落盘，字段见 `records/market/schema.md`；聚合结果写 `records/market/stats/`。
 - 每次成功采集并落盘后，自动 `git add -A && git commit`（提交信息形如 `chore: 采集 YYYY-MM-DD`）；采集失败或无新数据则跳过提交。
