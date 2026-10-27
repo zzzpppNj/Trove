@@ -25,12 +25,15 @@ description: 生成二手交易（默认闲鱼）的谈价话术、报价边界�
 ```bash
 python3 .codex/skills/price-negotiation/scripts/negotiation_state.py validate
 python3 .codex/skills/price-negotiation/scripts/negotiation_state.py list --active-only
+python3 scripts/negotiation_trigger.py --date YYYY-MM-DD --dry-run
 python3 .codex/skills/price-negotiation/scripts/negotiation_state.py archive --dry-run
 python3 .codex/skills/price-negotiation/scripts/negotiation_state.py transition <listing-id> awaiting_reply --our-message "<已发送原话>" --next-follow-up "2026-10-27 23:30"
 python3 .codex/skills/price-negotiation/scripts/negotiation_state.py check <listing-id> --seller-message "<卖家原话>" --next-follow-up "2026-10-28 09:30"
 ```
 
 每轮回复追踪先运行 `list --active-only`；只处理有变化或已到跟进时间的记录。不要反复催问，也不要把“浏览过”误写成“卖家已读”或“已承诺”。
+
+每次市场采集成功后运行一次触发评审。只有统计状态为 `ready` 的型号才能触发首次谈价；样本或观察期不足的型号只能继续观察。触发评审生成 `draft` 后，仍须实时复核商品再决定是否联系。
 
 终态与长期失联记录每周归档一次。归档前先运行 `archive --dry-run`；归档只移动 Markdown 和管理索引，不删除记录或截图。历史查询加 `--include-archived`。
 

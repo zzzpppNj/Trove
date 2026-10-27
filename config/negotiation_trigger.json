@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "enabled": true,
+  "max_listing_price": 1000,
+  "minimum_discount_pct": 5,
+  "first_offer_discount_pct": 7,
+  "allowed_seller_types": ["personal"],
+  "reject_flags": ["疑似矿卡", "问题机", "来源不清"],
+  "reject_text_patterns": ["外版随机发", "版本随机", "店铺回收", "商家直发", "来源不明"],
+  "active_slots": {
+    "safe": 3,
+    "medium": 2,
+    "high": 1
+  },
+  "same_model_slots": {
+    "safe": 2,
+    "medium": 1,
+    "high": 1
+  }
+}
