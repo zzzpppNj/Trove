@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "enabled": true,
+  "thread_id": "01a17d8d-69e7-7f62-93d7-132145bd4405",
+  "timezone": "Asia/Shanghai",
+  "active_window": {
+    "start": "08:00",
+    "end": "23:00"
+  },
+  "retry_failed_after_minutes": 5,
+  "repeat_unprocessed_after_minutes": 30
+}
