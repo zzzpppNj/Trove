@@ -51,6 +51,13 @@ def parse_clock(value: str) -> time:
 def parse_datetime(value: str, timezone: ZoneInfo) -> datetime | None:
     if not value or value == "-":
         return None
+    try:
+        parsed = datetime.fromisoformat(value.replace("Z", "+00:00"))
+        if parsed.tzinfo is None:
+            return parsed.replace(tzinfo=timezone)
+        return parsed.astimezone(timezone)
+    except ValueError:
+        pass
     for fmt in ("%Y-%m-%d %H:%M:%S", "%Y-%m-%d %H:%M", "%Y-%m-%d"):
         try:
             return datetime.strptime(value, fmt).replace(tzinfo=timezone)
