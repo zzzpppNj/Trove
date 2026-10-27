@@ -98,6 +98,32 @@ launchctl print gui/$(id -u)/com.trove.negotiation-scheduler
 
 没有页面明确显示的“已读”标记时，不推断卖家是否已读。只记录最后消息、时间和页面明确状态。
 
+## 周度归档
+
+活跃谈价保留在 `records/negotiation/` 根目录。每周日 22:00 与价格参数更新一起执行归档：
+
+```bash
+python3 .codex/skills/price-negotiation/scripts/negotiation_state.py archive
+```
+
+归档规则：
+
+- `completed`、`unavailable`、`rejected`、`abandoned` 在最后状态更新满 24 小时后归档。
+- `stale` 在最后状态更新满 7 天后归档。
+- 其他状态不移动。
+- 文件移动到 `records/negotiation/archive/YYYY-MM/`，月份取最后检查时间。
+- 不移动或删除截图；记录中的截图路径保持有效。
+- 归档时在消息时间线追加归档动作。
+- `records/negotiation/index.json` 统一列出活跃和归档记录。
+- 主目录默认只包含活跃记录，调度器不会扫描归档目录。
+
+执行前可运行 `archive --dry-run` 检查。历史查询：
+
+```bash
+python3 .codex/skills/price-negotiation/scripts/negotiation_state.py list --include-archived
+python3 .codex/skills/price-negotiation/scripts/negotiation_state.py show <listing-id> --include-archived
+```
+
 ## 报价边界
 
 - 市场价优先使用个人卖家中位数；所有价格按含邮总成本计算。

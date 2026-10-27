@@ -11,9 +11,10 @@ import argparse
 import hashlib
 import json
 import re
+import shutil
 import sys
 from collections import Counter
-from datetime import datetime
+from datetime import datetime, timedelta
 from pathlib import Path
 
 
@@ -117,8 +118,11 @@ def find_records_dir() -> Path:
     return Path.cwd() / "records" / "negotiation"
 
 
-def record_files(records_dir: Path) -> list[Path]:
-    return sorted(path for path in records_dir.glob("*.md") if path.is_file())
+def record_files(records_dir: Path, include_archived: bool = False) -> list[Path]:
+    paths = list(records_dir.glob("*.md"))
+    if include_archived:
+        paths.extend((records_dir / "archive").rglob("*.md"))
+    return sorted(path for path in paths if path.is_file())
 
 
 def fields(text: str) -> dict[str, str]:
@@ -164,19 +168,32 @@ def load_record(path: Path) -> dict[str, object]:
     }
 
 
-def all_records(records_dir: Path) -> list[dict[str, object]]:
-    return [load_record(path) for path in record_files(records_dir)]
+def all_records(
+    records_dir: Path,
+    include_archived: bool = False,
+) -> list[dict[str, object]]:
+    return [
+        load_record(path)
+        for path in record_files(records_dir, include_archived=include_archived)
+    ]
 
 
-def find_by_id(records_dir: Path, listing_id: str) -> tuple[dict[str, object], list[dict[str, object]]]:
-    records = all_records(records_dir)
+def find_by_id(
+    records_dir: Path,
+    listing_id: str,
+    include_archived: bool = False,
+) -> tuple[dict[str, object], list[dict[str, object]]]:
+    records = all_records(records_dir, include_archived=include_archived)
     matches = [record for record in records if record["id"] == listing_id]
     return (matches[0], records) if len(matches) == 1 else ({}, records)
 
 
-def validate_records(records_dir: Path) -> tuple[list[str], list[dict[str, object]]]:
+def validate_records(
+    records_dir: Path,
+    include_archived: bool = False,
+) -> tuple[list[str], list[dict[str, object]]]:
     errors: list[str] = []
-    records = all_records(records_dir)
+    records = all_records(records_dir, include_archived=include_archived)
     seen_ids: dict[str, Path] = {}
 
     for record in records:
@@ -188,13 +205,14 @@ def validate_records(records_dir: Path) -> tuple[list[str], list[dict[str, objec
 
         listing_id = str(record["id"])
         status = str(record["status"])
+        archived = "archive" in path.parts
         if not listing_id:
             errors.append(f"{path.name}: 商品 ID 为空")
-        elif listing_id in seen_ids:
+        elif not archived and listing_id in seen_ids:
             errors.append(
                 f"{path.name}: 商品 ID {listing_id} 与 {seen_ids[listing_id].name} 重复"
             )
-        else:
+        elif not archived:
             seen_ids[listing_id] = path
 
         if status not in STATUSES:
@@ -243,10 +261,18 @@ def print_json(value: object) -> None:
     print(json.dumps(value, ensure_ascii=False, indent=2))
 
 
-def public_record(record: dict[str, object]) -> dict[str, object]:
+def public_record(
+    records_dir: Path,
+    record: dict[str, object],
+) -> dict[str, object]:
     parsed = record["fields"]
     follow_up = record.get("next_follow_up", "")
     follow_up_time = parse_time(str(follow_up))
+    path = Path(record["path"])
+    try:
+        relative_path = str(path.relative_to(records_dir))
+    except ValueError:
+        relative_path = str(path)
     return {
         "id": record["id"],
         "model": record["model"],
@@ -261,8 +287,27 @@ def public_record(record: dict[str, object]) -> dict[str, object]:
         "follow_up_due": bool(follow_up_time and follow_up_time <= datetime.now()),
         "last_seller_message": parsed.get("最后卖家消息", ""),
         "last_seller_message_hash": parsed.get("最后卖家消息哈希", ""),
-        "path": str(record["path"]),
+        "path": str(path),
+        "relative_path": relative_path,
+        "archived": "archive" in path.parts,
     }
+
+
+def write_index(records_dir: Path) -> Path:
+    records = all_records(records_dir, include_archived=True)
+    payload = {
+        "updated_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        "total": len(records),
+        "records": [public_record(records_dir, record) for record in records],
+    }
+    path = records_dir / "index.json"
+    temporary = path.with_suffix(".json.tmp")
+    temporary.write_text(
+        json.dumps(payload, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+    )
+    temporary.replace(path)
+    return path
 
 
 def ensure_transition(current: str, new: str) -> None:
@@ -325,7 +370,10 @@ def update_record(
 
 
 def cmd_validate(args: argparse.Namespace) -> int:
-    errors, records = validate_records(args.records_dir)
+    errors, records = validate_records(
+        args.records_dir,
+        include_archived=args.include_archived,
+    )
     if errors:
         for error in errors:
             print(f"ERROR: {error}", file=sys.stderr)
@@ -335,8 +383,11 @@ def cmd_validate(args: argparse.Namespace) -> int:
 
 
 def cmd_list(args: argparse.Namespace) -> int:
-    records = all_records(args.records_dir)
-    items = [public_record(record) for record in records]
+    records = all_records(
+        args.records_dir,
+        include_archived=args.include_archived,
+    )
+    items = [public_record(args.records_dir, record) for record in records]
     if args.active_only:
         items = [item for item in items if item["status"] in ACTIVE_STATUSES]
     if args.due_only:
@@ -354,20 +405,27 @@ def cmd_list(args: argparse.Namespace) -> int:
 
 
 def cmd_show(args: argparse.Namespace) -> int:
-    record, records = find_by_id(args.records_dir, args.listing_id)
+    record, records = find_by_id(
+        args.records_dir,
+        args.listing_id,
+        include_archived=args.include_archived,
+    )
     if not record:
         count = sum(1 for item in records if item["id"] == args.listing_id)
         detail = "未找到" if count == 0 else f"发现重复 {count} 条"
         print(f"ERROR: 商品 {args.listing_id} {detail}", file=sys.stderr)
         return 1
-    print_json(public_record(record))
+    print_json(public_record(args.records_dir, record))
     return 0
 
 
 def cmd_summary(args: argparse.Namespace) -> int:
-    records = all_records(args.records_dir)
+    records = all_records(
+        args.records_dir,
+        include_archived=args.include_archived,
+    )
     counts = Counter(str(record["status"]) for record in records)
-    items = [public_record(record) for record in records]
+    items = [public_record(args.records_dir, record) for record in records]
     due = [
         item
         for item in items
@@ -427,6 +485,7 @@ def cmd_transition(args: argparse.Namespace) -> int:
         our_message=args.our_message or None,
         next_follow_up=args.next_follow_up or None,
     )
+    write_index(args.records_dir)
     print(f"OK: {args.listing_id} {current} → {args.status}")
     return 0
 
@@ -475,7 +534,101 @@ def cmd_check(args: argparse.Namespace) -> int:
         next_follow_up=args.next_follow_up,
         append_event=bool(events or args.note),
     )
+    write_index(args.records_dir)
     print(f"OK: 已更新 {args.listing_id}")
+    return 0
+
+
+def cmd_index(args: argparse.Namespace) -> int:
+    path = write_index(args.records_dir)
+    print(f"OK: {path}")
+    return 0
+
+
+def archivable_records(
+    records_dir: Path,
+    now: datetime,
+    terminal_min_age_hours: float,
+    stale_min_age_days: float,
+) -> tuple[list[dict[str, object]], list[str]]:
+    eligible = []
+    skipped = []
+    for record in all_records(records_dir):
+        status = str(record["status"])
+        last_checked = parse_time(str(record["fields"].get("最后检查时间", "")))
+        if last_checked is None:
+            skipped.append(f"{record['id']}: 缺少有效最后检查时间")
+            continue
+        age = now - last_checked
+        if status in TERMINAL_STATUSES:
+            if age >= timedelta(hours=terminal_min_age_hours):
+                eligible.append(record)
+            else:
+                skipped.append(
+                    f"{record['id']}: 终态尚未满 {terminal_min_age_hours:g} 小时"
+                )
+        elif status == "stale":
+            if age >= timedelta(days=stale_min_age_days):
+                eligible.append(record)
+            else:
+                skipped.append(
+                    f"{record['id']}: stale 尚未满 {stale_min_age_days:g} 天"
+                )
+        else:
+            skipped.append(f"{record['id']}: 状态 {status} 不归档")
+    return eligible, skipped
+
+
+def cmd_archive(args: argparse.Namespace) -> int:
+    now = (
+        datetime.fromisoformat(args.now)
+        if args.now
+        else datetime.now()
+    )
+    eligible, skipped = archivable_records(
+        args.records_dir,
+        now,
+        terminal_min_age_hours=args.terminal_min_age_hours,
+        stale_min_age_days=args.stale_min_age_days,
+    )
+    results = []
+    for record in eligible:
+        source = Path(record["path"])
+        last_checked = parse_time(str(record["fields"].get("最后检查时间", "")))
+        month = (last_checked or now).strftime("%Y-%m")
+        destination_dir = args.records_dir / "archive" / month
+        destination = destination_dir / source.name
+        results.append(
+            {
+                "id": record["id"],
+                "status": record["status"],
+                "source": str(source),
+                "destination": str(destination),
+            }
+        )
+        if args.dry_run:
+            continue
+        destination_dir.mkdir(parents=True, exist_ok=True)
+        if destination.exists():
+            raise ValueError(f"归档目标已存在：{destination}")
+        text = append_timeline(
+            str(record["text"]),
+            now.strftime("%Y-%m-%d %H:%M:%S"),
+            f"归档至 {destination.relative_to(args.records_dir)}",
+        )
+        source.write_text(text, encoding="utf-8")
+        shutil.move(str(source), str(destination))
+
+    if not args.dry_run:
+        write_index(args.records_dir)
+    if args.json:
+        print_json({"dry_run": args.dry_run, "archived": results, "skipped": skipped})
+    else:
+        action = "将归档" if args.dry_run else "已归档"
+        if not results:
+            print("没有符合条件的谈价记录")
+        for item in results:
+            print(f"{action}: {item['id']} {item['status']} -> {item['destination']}")
     return 0
 
 
@@ -490,19 +643,23 @@ def build_parser() -> argparse.ArgumentParser:
     subparsers = parser.add_subparsers(dest="command", required=True)
 
     validate = subparsers.add_parser("validate", help="校验所有谈价记录")
+    validate.add_argument("--include-archived", action="store_true")
     validate.set_defaults(func=cmd_validate)
 
     list_cmd = subparsers.add_parser("list", help="列出谈价记录")
     list_cmd.add_argument("--active-only", action="store_true")
     list_cmd.add_argument("--due-only", action="store_true")
+    list_cmd.add_argument("--include-archived", action="store_true")
     list_cmd.add_argument("--json", action="store_true")
     list_cmd.set_defaults(func=cmd_list)
 
     show = subparsers.add_parser("show", help="按商品 ID 显示一条记录")
     show.add_argument("listing_id")
+    show.add_argument("--include-archived", action="store_true")
     show.set_defaults(func=cmd_show)
 
     summary = subparsers.add_parser("summary", help="统计状态和到期跟进")
+    summary.add_argument("--include-archived", action="store_true")
     summary.add_argument("--json", action="store_true")
     summary.set_defaults(func=cmd_summary)
 
@@ -523,6 +680,17 @@ def build_parser() -> argparse.ArgumentParser:
     check.add_argument("--note", default="")
     check.add_argument("--at", default="")
     check.set_defaults(func=cmd_check)
+
+    index = subparsers.add_parser("index", help="重建活跃与归档统一索引")
+    index.set_defaults(func=cmd_index)
+
+    archive = subparsers.add_parser("archive", help="按规则归档终态与休眠谈价记录")
+    archive.add_argument("--dry-run", action="store_true")
+    archive.add_argument("--json", action="store_true")
+    archive.add_argument("--terminal-min-age-hours", type=float, default=24)
+    archive.add_argument("--stale-min-age-days", type=float, default=7)
+    archive.add_argument("--now", help="测试用时间 YYYY-MM-DDTHH:MM:SS")
+    archive.set_defaults(func=cmd_archive)
 
     return parser
 
