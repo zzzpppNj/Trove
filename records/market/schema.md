@@ -18,7 +18,7 @@
 
 | 字段 | 类型 | 说明 |
 | --- | --- | --- |
-| id | string | 唯一标识，建议 `${date}-${序号}` 或商品 ID |
+| id | string | 平台商品 id（闲鱼为 item id），用于跨日去重；历史记录早期为日期序号，去重时同时解析 `url` 中的 id |
 | category | string | 品类，见下方枚举 |
 | brand | string | 品牌 |
 | model | string | 型号，必须具体到可比型号 |
