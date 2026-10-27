@@ -238,6 +238,10 @@ def validate_records(
             if parse_time(parsed.get("最后检查时间", "")) is None:
                 errors.append(f"{path.name}: 未记录有效的最后检查时间")
 
+        if status in ACTIVE_STATUSES:
+            if parse_time(parsed.get("下次跟进", "")) is None:
+                errors.append(f"{path.name}: {status} 要求有效的下次跟进时间")
+
         if status in {"negotiating", "awaiting_user", "handoff"}:
             message = parsed.get("最后卖家消息", "").strip()
             digest = parsed.get("最后卖家消息哈希", "").strip()
@@ -248,11 +252,8 @@ def validate_records(
 
         if status == "awaiting_reply":
             sent = parsed.get("最后我方消息", "").strip()
-            next_follow_up = parse_time(parsed.get("下次跟进", ""))
             if not sent or sent == "-":
                 errors.append(f"{path.name}: awaiting_reply 要求记录最后我方消息")
-            if next_follow_up is None:
-                errors.append(f"{path.name}: awaiting_reply 要求有效的下次跟进时间")
 
     return errors, records
 
@@ -464,15 +465,16 @@ def cmd_transition(args: argparse.Namespace) -> int:
     except ValueError as exc:
         print(f"ERROR: {exc}", file=sys.stderr)
         return 1
+    if args.status in ACTIVE_STATUSES:
+        if parse_time(args.next_follow_up) is None:
+            print(
+                f"ERROR: 进入 {args.status} 时必须提供 --next-follow-up YYYY-MM-DD HH:MM",
+                file=sys.stderr,
+            )
+            return 1
     if args.status == "awaiting_reply":
         if not args.our_message.strip():
             print("ERROR: 进入 awaiting_reply 时必须提供 --our-message", file=sys.stderr)
-            return 1
-        if parse_time(args.next_follow_up) is None:
-            print(
-                "ERROR: 进入 awaiting_reply 时必须提供 --next-follow-up YYYY-MM-DD HH:MM",
-                file=sys.stderr,
-            )
             return 1
     timestamp = args.at or datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     note = args.note or f"状态 {current} → {args.status}"
@@ -512,6 +514,12 @@ def cmd_check(args: argparse.Namespace) -> int:
         if parse_time(args.next_follow_up) is None:
             print("ERROR: 下次跟进时间格式应为 YYYY-MM-DD HH:MM", file=sys.stderr)
             return 1
+    if new_status in ACTIVE_STATUSES and parse_time(args.next_follow_up) is None:
+        print(
+            f"ERROR: 进入 {new_status} 时必须提供 --next-follow-up YYYY-MM-DD HH:MM",
+            file=sys.stderr,
+        )
+        return 1
 
     timestamp = args.at or datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     events = []
