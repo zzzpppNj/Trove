@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-28 21:50:26",
+  "updated_at": "2026-10-28 21:51:23",
   "total": 9,
   "records": [
     {
@@ -119,9 +119,9 @@
       "first_offer": 144.0,
       "target_price": 144.0,
       "max_price": 155.0,
-      "last_checked": "2026-10-28 20:50:55",
-      "next_follow_up": "2026-10-28 21:50",
-      "follow_up_due": true,
+      "last_checked": "2026-10-28 21:51:20",
+      "next_follow_up": "2026-10-28 22:51",
+      "follow_up_due": false,
       "last_seller_message": "无",
       "last_seller_message_hash": "无",
       "path": "/Users/zhangpeng/Desktop/AgentWorkspace/Trove/records/negotiation/2026-10-28-Switch-Sports-1094389526613.md",
