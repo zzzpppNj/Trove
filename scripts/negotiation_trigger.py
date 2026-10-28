@@ -225,16 +225,17 @@ def evaluate(day: str, trigger: dict) -> dict:
     ]
     active_by_tier = Counter()
     active_by_model = Counter()
-    handoff_models = set()
+    blocked_models = {
+        str(item["model"])
+        for item in negotiations
+        if item["status"] in {"handoff", "completed"}
+    }
 
     for item in active:
         pricing_item = price_item_for_model(str(item["model"]), pricing)
         tier = str((pricing_item or {}).get("risk_tier", "high"))
         active_by_tier[tier] += 1
         active_by_model[str(item["model"])] += 1
-        if item["status"] == "handoff":
-            handoff_models.add(str(item["model"]))
-
     decisions = []
     for record in market.get("records", []):
         listing_id = str(record.get("id", ""))
@@ -249,6 +250,9 @@ def evaluate(day: str, trigger: dict) -> dict:
             continue
         if listing_id in existing_ids:
             decisions.append({"id": listing_id, "model": model, "action": "existing", "reason": "已有谈价或归档记录"})
+            continue
+        if model in blocked_models:
+            decisions.append({"id": listing_id, "model": model, "action": "reject", "reason": "已购买同型号，停止重复谈价"})
             continue
         rejected = reject_reason(record, trigger)
         if rejected:
@@ -278,7 +282,6 @@ def evaluate(day: str, trigger: dict) -> dict:
         has_capacity = (
             active_by_tier[tier] < tier_limit
             and active_by_model[model] < model_limit
-            and model not in handoff_models
         )
         decisions.append(
             {

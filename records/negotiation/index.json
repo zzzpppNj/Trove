@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-28 21:07:19",
+  "updated_at": "2026-10-28 21:50:26",
   "total": 9,
   "records": [
     {
@@ -121,7 +121,7 @@
       "max_price": 155.0,
       "last_checked": "2026-10-28 20:50:55",
       "next_follow_up": "2026-10-28 21:50",
-      "follow_up_due": false,
+      "follow_up_due": true,
       "last_seller_message": "无",
       "last_seller_message_hash": "无",
       "path": "/Users/zhangpeng/Desktop/AgentWorkspace/Trove/records/negotiation/2026-10-28-Switch-Sports-1094389526613.md",
@@ -149,17 +149,17 @@
     {
       "id": "1093475379168",
       "model": "女神异闻录5 皇家版",
-      "status": "awaiting_reply",
+      "status": "unavailable",
       "seller": "渴望吃到好价谷",
       "current_price": 120.0,
       "first_offer": 112.0,
       "target_price": 112.0,
       "max_price": 120.0,
-      "last_checked": "2026-10-28 20:50:56",
-      "next_follow_up": "2026-10-28 21:50",
+      "last_checked": "2026-10-28 21:50:20",
+      "next_follow_up": "-",
       "follow_up_due": false,
-      "last_seller_message": "稍等！马上就来",
-      "last_seller_message_hash": "5a410c766cd5eea7",
+      "last_seller_message": "稍等！马上就来；老师已经出掉了",
+      "last_seller_message_hash": "b63cbdb0852801d1",
       "path": "/Users/zhangpeng/Desktop/AgentWorkspace/Trove/records/negotiation/2026-10-28-女神异闻录5-皇家版-1093475379168.md",
       "relative_path": "2026-10-28-女神异闻录5-皇家版-1093475379168.md",
       "archived": false
