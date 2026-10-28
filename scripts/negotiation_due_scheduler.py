@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""Wake the Trove thread only when a negotiation record is due.
+"""Wake the per-listing Trove thread when a negotiation record is due.
 
 This scheduler is intentionally deterministic and does not use an LLM. It runs
-from launchd, reads the negotiation state, and queues one message when at least
-one active listing has reached its per-listing next_follow_up time.
+from launchd, reads the negotiation state, and queues one message per target
+thread when active listings have reached their per-listing next_follow_up time.
 """
 
 from __future__ import annotations
@@ -97,6 +97,16 @@ def due_records(records: list[dict], timezone: ZoneInfo, now: datetime) -> list[
     return due
 
 
+def group_by_thread(records: list[dict], fallback_thread_id: str) -> dict[str, list[dict]]:
+    grouped: dict[str, list[dict]] = {}
+    for record in records:
+        thread_id = str(record.get("thread_id") or fallback_thread_id or "").strip()
+        if not thread_id:
+            thread_id = ""
+        grouped.setdefault(thread_id, []).append(record)
+    return grouped
+
+
 def dispatched_recently(
     state: dict,
     record: dict,
@@ -107,6 +117,8 @@ def dispatched_recently(
 ) -> bool:
     saved = state.get("targets", {}).get(str(record["id"]), {})
     if saved.get("next_follow_up") != record.get("next_follow_up"):
+        return False
+    if saved.get("thread_id") != record.get("thread_id", ""):
         return False
     attempted = parse_datetime(str(saved.get("last_attempt_at", "")), timezone)
     interval = repeat_minutes if saved.get("last_success_at") else retry_minutes
@@ -218,54 +230,78 @@ def main() -> int:
         if not actionable:
             return 0
 
-        message = build_queue_message(actionable, now)
+        fallback_thread_id = str(config.get("thread_id", "")).strip()
+        groups = group_by_thread(actionable, fallback_thread_id)
         if args.dry_run:
-            print(message)
+            for thread_id, group in groups.items():
+                print("--- thread", thread_id or "<missing>", "---")
+                print(build_queue_message(group, now))
             return 0
 
-        thread_id = config.get("thread_id", "").strip()
-        if not thread_id:
-            write_log("ERROR thread_id missing")
-            write_error("启动谈价调度", "配置缺少 thread_id")
-            return 1
-
-        try:
-            result = subprocess.run(
-                [codex_path, "queue", "--thread", thread_id, "--message", message],
-                cwd=ROOT,
-                text=True,
-                capture_output=True,
-                check=False,
-                timeout=30,
-            )
-        except subprocess.TimeoutExpired:
-            write_log("ERROR queue timed out")
-            write_error("唤醒谈价任务", "codex queue 超过 30 秒未返回")
-            return 1
         attempted_at = now.isoformat(timespec="seconds")
         targets = state.setdefault("targets", {})
-        for record in actionable:
-            item = targets.setdefault(str(record["id"]), {})
-            item["next_follow_up"] = record.get("next_follow_up", "")
-            item["last_attempt_at"] = attempted_at
-            if result.returncode == 0:
-                item["last_success_at"] = attempted_at
-                item["last_error"] = ""
+        had_error = False
+        for thread_id, group in groups.items():
+            record_ids = ",".join(str(record["id"]) for record in group)
+            if not thread_id:
+                had_error = True
+                detail = "缺少谈价线程 ID，且配置没有 fallback thread_id"
+                write_log(f"ERROR missing thread ids={record_ids} detail={detail}")
+                write_error("启动谈价调度", detail)
+                for record in group:
+                    item = targets.setdefault(str(record["id"]), {})
+                    item["next_follow_up"] = record.get("next_follow_up", "")
+                    item["thread_id"] = record.get("thread_id", "")
+                    item["last_attempt_at"] = attempted_at
+                    item["last_error"] = detail
+                continue
+
+            message = build_queue_message(group, now)
+            try:
+                result = subprocess.run(
+                    [codex_path, "queue", "--thread", thread_id, "--message", message],
+                    cwd=ROOT,
+                    text=True,
+                    capture_output=True,
+                    check=False,
+                    timeout=30,
+                )
+            except subprocess.TimeoutExpired:
+                had_error = True
+                detail = "codex queue 超过 30 秒未返回"
+                write_log(f"ERROR queue timed out thread={thread_id} ids={record_ids}")
+                write_error("唤醒谈价任务", detail)
+                for record in group:
+                    item = targets.setdefault(str(record["id"]), {})
+                    item["next_follow_up"] = record.get("next_follow_up", "")
+                    item["thread_id"] = record.get("thread_id", "")
+                    item["last_attempt_at"] = attempted_at
+                    item["last_error"] = detail
+                continue
+
+            for record in group:
+                item = targets.setdefault(str(record["id"]), {})
+                item["next_follow_up"] = record.get("next_follow_up", "")
+                item["thread_id"] = record.get("thread_id", "")
+                item["last_attempt_at"] = attempted_at
+                if result.returncode == 0:
+                    item["last_success_at"] = attempted_at
+                    item["last_error"] = ""
+                else:
+                    item["last_error"] = (result.stderr or result.stdout or "queue failed").strip()
+
+            if result.returncode != 0:
+                had_error = True
+                detail = (result.stderr or result.stdout or "queue failed").strip()
+                write_log(
+                    f"ERROR queue failed thread={thread_id} ids={record_ids} "
+                    f"detail={detail}"
+                )
+                write_error("唤醒谈价任务", detail)
             else:
-                item["last_error"] = (result.stderr or result.stdout or "queue failed").strip()
+                write_log(f"queued thread={thread_id} ids={record_ids}")
         atomic_json(STATE_PATH, state)
-
-        if result.returncode != 0:
-            detail = (result.stderr or result.stdout or "queue failed").strip()
-            write_log(
-                f"ERROR queue failed ids={','.join(str(r['id']) for r in actionable)} "
-                f"detail={detail}"
-            )
-            write_error("唤醒谈价任务", detail)
-            return result.returncode
-
-        write_log(f"queued ids={','.join(str(r['id']) for r in actionable)}")
-        return 0
+        return 1 if had_error else 0
 
 
 if __name__ == "__main__":

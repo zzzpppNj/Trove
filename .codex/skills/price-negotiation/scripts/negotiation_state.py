@@ -160,6 +160,7 @@ def load_record(path: Path) -> dict[str, object]:
         "model": model,
         "id": parsed.get("商品 ID", ""),
         "status": parsed.get("谈价状态", ""),
+        "thread_id": parsed.get("谈价线程 ID", ""),
         "current_price": money(parsed, "当前挂牌价"),
         "first_offer": money(parsed, "首报"),
         "target_price": money(parsed, "目标价"),
@@ -278,6 +279,7 @@ def public_record(
         "id": record["id"],
         "model": record["model"],
         "status": record["status"],
+        "thread_id": parsed.get("谈价线程 ID", ""),
         "seller": parsed.get("卖家", ""),
         "current_price": record["current_price"],
         "first_offer": record["first_offer"],
@@ -347,6 +349,7 @@ def update_record(
     *,
     note: str,
     status: str | None = None,
+    thread_id: str | None = None,
     our_message: str | None = None,
     seller_message: str | None = None,
     next_follow_up: str | None = None,
@@ -355,6 +358,16 @@ def update_record(
     text = replace_field(text, "最后检查时间", timestamp)
     if status is not None:
         text = replace_field(text, "谈价状态", status)
+    if thread_id is not None:
+        pattern = re.compile(r"^- 谈价线程 ID：.*$", re.MULTILINE)
+        if pattern.search(text):
+            text = replace_field(text, "谈价线程 ID", thread_id)
+        else:
+            anchor = re.compile(r"^(- 估算合理成交价：.*)$", re.MULTILINE)
+            replacement = rf"\1\n- 谈价线程 ID：{thread_id}"
+            if not anchor.search(text):
+                raise ValueError("记录缺少可插入线程字段的锚点")
+            text = anchor.sub(replacement, text, count=1)
     if our_message is not None:
         message = re.sub(r"\s+", " ", our_message).strip()
         text = replace_field(text, "最后我方消息", message or "-")
@@ -547,6 +560,32 @@ def cmd_check(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_set_thread(args: argparse.Namespace) -> int:
+    record, records = find_by_id(args.records_dir, args.listing_id)
+    if not record:
+        count = sum(1 for item in records if item["id"] == args.listing_id)
+        detail = "未找到" if count == 0 else f"发现重复 {count} 条"
+        print(f"ERROR: 商品 {args.listing_id} {detail}", file=sys.stderr)
+        return 1
+    thread_id = args.thread_id.strip()
+    if not thread_id:
+        print("ERROR: --thread-id 不能为空", file=sys.stderr)
+        return 1
+    timestamp = args.at or datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    note = args.note or f"绑定谈价线程 {thread_id}"
+    update_record(
+        record["path"],
+        str(record["text"]),
+        timestamp,
+        note=note,
+        thread_id=thread_id,
+        append_event=True,
+    )
+    write_index(args.records_dir)
+    print(f"OK: {args.listing_id} 谈价线程 -> {thread_id}")
+    return 0
+
+
 def cmd_index(args: argparse.Namespace) -> int:
     path = write_index(args.records_dir)
     print(f"OK: {path}")
@@ -688,6 +727,13 @@ def build_parser() -> argparse.ArgumentParser:
     check.add_argument("--note", default="")
     check.add_argument("--at", default="")
     check.set_defaults(func=cmd_check)
+
+    set_thread = subparsers.add_parser("set-thread", help="为谈价记录绑定独立线程")
+    set_thread.add_argument("listing_id", help="商品 ID")
+    set_thread.add_argument("thread_id", help="Codex 线程 ID")
+    set_thread.add_argument("--note", help="消息时间线备注")
+    set_thread.add_argument("--at", help="记录时间，默认当前时间")
+    set_thread.set_defaults(func=cmd_set_thread)
 
     index = subparsers.add_parser("index", help="重建活跃与归档统一索引")
     index.set_defaults(func=cmd_index)

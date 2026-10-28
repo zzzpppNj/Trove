@@ -48,3 +48,5 @@ Trove 会先和你确认关键条件，然后开始搜索、筛选、评估，�
 ## 购买策略
 
 买入决策由 [config/acquisition_policy.json](config/acquisition_policy.json) 配置，当前只启用 `resale_profit`（可盈利转卖）模式，后续可扩展 `personal_use`（自用）模式。计算公式和门槛在 [scripts/acquisition_policy.py](scripts/acquisition_policy.py) 中维护，买入前会把卖出快递、包材、平台费和风险准备金从预计卖出价里扣除。
+
+谈价跟进采用“一个 listing 一个独立线程”，由 [scripts/negotiation_due_scheduler.py](scripts/negotiation_due_scheduler.py) 按每条记录的 `thread_id` 在到期时唤醒对应线程；每日采集/聚合等非谈价任务仍使用 `config/negotiation_scheduler.json` 里的 fallback 线程。

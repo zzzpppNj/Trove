@@ -172,6 +172,7 @@ def draft_text(record: dict, stats: dict, item: dict, trigger: dict, decision: d
         f"- 市场样本：{stats.get('sample_count', 0)} 条，跨度 {stats.get('time_span_days', 0)} 天",
         f"- 市场参考价：P25 {p25:g} 元，P75 {p75:g} 元",
         f"- 估算合理成交价：{estimated_low}–{estimated_high} 元",
+        "- 谈价线程 ID：待分配",
         "- 购买模式：可盈利转卖",
         f"- 全包买入成本：{result.get('landed_buy_cost', price):g} 元",
         f"- 预计卖出价：{exit_price:g} 元（置信度：{result.get('exit_confidence', 'unknown')}）",

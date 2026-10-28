@@ -104,7 +104,9 @@ python3 scripts/negotiation_trigger.py --date YYYY-MM-DD --json
 
 ## 逐商品调度
 
-活跃谈价由本地 `scripts/negotiation_due_scheduler.py` 每分钟检查一次；该检查不调用模型。只有某条记录到达自己的 `下次跟进` 时，调度器才通过 `codex queue` 唤醒当前 Codex 线程，并把本轮到期商品合并成一条消息。
+活跃谈价由本地 `scripts/negotiation_due_scheduler.py` 每分钟检查一次；该检查不调用模型。每个 listing 使用自己的独立 Codex 线程，`thread_id` 记录在档案的 `- 谈价线程 ID：` 字段和 `index.json` 中。只有某条记录到达自己的 `下次跟进` 时，调度器才向该记录对应的线程 `codex queue`；没有 `thread_id` 的旧记录退回配置中的 fallback 线程。
+
+新 listing 首次进入谈价前，用 `negotiation_state.py set-thread <listing-id> <thread-id>` 绑定线程；终态记录停止投递，随后按归档规则归档线程。
 
 因此：
 

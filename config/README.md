@@ -59,3 +59,18 @@ Trove 的数据源平台由 `platforms.json` 配置，不在代码里写死。
 - `same_model_slots`：同一型号的最大 active 谈价数。
 
 触发资格严格以 `records/market/stats/*.json` 的 `status=ready` 为准。只有 3 天数据、样本不足或观察跨度不足的型号只进入观察，不得创建谈价。
+
+## 逐商品谈价调度（negotiation_scheduler.json）
+
+调度器按 `records/negotiation/index.json` 中每条记录的 `thread_id` 分组投递：一个 listing 一个独立线程，到期后向该线程 `codex queue`。旧记录没有 `thread_id` 时，退回 `negotiation_scheduler.json` 里的 `thread_id` 作为 fallback。
+
+- `thread_id`：fallback 线程 id，通常用于每日采集/聚合等非谈价任务。
+- `active_window`：允许唤醒的时间段。
+- `retry_failed_after_minutes`：投递失败后的重试间隔。
+- `repeat_unprocessed_after_minutes`：投递成功但尚未处理的重复提醒间隔。
+
+新建独立谈价线程时，用状态脚本把线程 id 绑定到档案：
+
+```bash
+python3 .codex/skills/price-negotiation/scripts/negotiation_state.py set-thread <listing-id> <thread-id>
+```
