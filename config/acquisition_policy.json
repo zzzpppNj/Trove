@@ -1,0 +1,29 @@
+{
+  "version": 1,
+  "active_mode": "resale_profit",
+  "modes": {
+    "resale_profit": {
+      "min_net_profit": 20,
+      "min_roi_pct": 15,
+      "risk_reserve_pct": 10,
+      "risk_reserve_min": 10,
+      "platform_fee_pct": 0,
+      "listing_estimate_pct": 85,
+      "min_sold_comps": 5,
+      "allow_estimated_exit": true,
+      "auto_trigger_min_confidence": "high"
+    }
+  },
+  "cost_profiles": {
+    "图书绘本游戏卡带": {
+      "shipping_out": 10,
+      "packaging": 2,
+      "inbound_shipping_default": 10
+    },
+    "母婴健身乐器": {
+      "shipping_out": 40,
+      "packaging": 10,
+      "inbound_shipping_default": 0
+    }
+  }
+}

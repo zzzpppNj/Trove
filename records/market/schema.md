@@ -24,6 +24,8 @@
 | model | string | 型号，必须具体到可比型号 |
 | title | string | 商品标题 |
 | listing_price | number | 挂牌价（元） |
+| shipping_included | boolean\|null | 是否包邮；未确认时记 null |
+| shipping_cost_in | number\|null | 卖家另收的买入邮费（元），不包邮且已知时填写 |
 | condition | string | 新旧程度 |
 | seller_type | string | personal / suspected_reseller / unknown |
 | region | string | 地区 |
@@ -31,6 +33,10 @@
 | face_to_face | boolean | 是否支持面交（仅限用户所在城市合肥） |
 | platform_inspection | boolean | 是否支持平台验货/验机（如闲鱼验机） |
 | flags | string[] | 标记，如“疑似矿卡”“来源不清”“低于行情” |
+| sold | boolean | 是否已售；用于聚合真实成交价 |
+| sold_price | number\|null | 已售成交价（元），仅 sold=true 时有效 |
+| listed_at | string\|null | 上架时间，ISO 日期或日期时间 |
+| sold_at | string\|null | 售出时间，ISO 日期或日期时间 |
 | notes | string | 备注 |
 
 ## 枚举
@@ -47,6 +53,8 @@
 - 参考市场价优先用个人卖家中位数；样本不足时用全体中位数并在 notes 注明。
 - 挂牌价不等于成交价：估算成交价可按挂牌价中位数 × 0.85–0.95；有“已售 / 成交”信息优先采信。
 - 好价：挂牌价 ≤ 参考市场价区间下限（约 P25），且通过风险检查。
+- 已售样本（`sold=true` 且有 `sold_price`）额外聚合 `sold_sample_count`、`sold_median`、`sold_p25`、`sold_p75`、`sold_span_days`；有真实成交时优先作为退出价基准。
+- 可盈利转卖模式的买入决策由 `config/acquisition_policy.json` 和 `scripts/acquisition_policy.py` 计算，不直接使用 `good_price_line`。
 
 ## 单条记录示例
 
@@ -62,6 +70,8 @@
       "model": "EF 50mm f/1.8 STM",
       "title": "佳能小痰盂 50 1.8 自用",
       "listing_price": 450,
+      "shipping_included": true,
+      "shipping_cost_in": null,
       "condition": "9成新",
       "seller_type": "personal",
       "region": "上海",
@@ -69,6 +79,10 @@
       "face_to_face": true,
       "platform_inspection": false,
       "flags": [],
+      "sold": false,
+      "sold_price": null,
+      "listed_at": "2026-10-21",
+      "sold_at": null,
       "notes": "带前后盖，无霉无划痕"
     }
   ]
@@ -92,6 +106,11 @@
   "p25": 400,
   "p75": 470,
   "fair_price_range": [400, 470],
+  "sold_sample_count": 12,
+  "sold_median": 395,
+  "sold_p25": 380,
+  "sold_p75": 420,
+  "sold_span_days": 21,
   "status": "ready",
   "notes": ""
 }

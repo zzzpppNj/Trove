@@ -11,6 +11,7 @@ import argparse
 import json
 import re
 import subprocess
+import sys
 from collections import Counter
 from datetime import date, datetime
 from pathlib import Path
@@ -24,6 +25,10 @@ STATS_DIR = MARKET_DIR / "stats"
 NEGOTIATION_DIR = ROOT / "records" / "negotiation"
 DECISION_DIR = NEGOTIATION_DIR / "trigger-decisions"
 STATE_SCRIPT = ROOT / ".codex" / "skills" / "price-negotiation" / "scripts" / "negotiation_state.py"
+
+sys.path.insert(0, str(ROOT / "scripts"))
+
+import acquisition_policy  # noqa: E402
 
 
 def load_json(path: Path) -> object:
@@ -103,13 +108,11 @@ def reject_reason(record: dict, config: dict) -> str | None:
     return None
 
 
-def priority_score(record: dict, stats: dict, good_line: float) -> tuple[float, list[str]]:
-    price = float(record["listing_price"])
-    p25 = float(stats.get("p25") or good_line)
-    base = min(float(good_line), p25)
-    discount = max(0.0, (base - price) / base * 100) if base else 0.0
-    score = discount * 6
-    reasons = [f"低于参考下限 {discount:.1f}%"]
+def priority_score(record: dict, result: dict) -> tuple[float, list[str]]:
+    profit = float(result.get("expected_profit") or 0)
+    roi = float(result.get("roi_pct") or 0)
+    score = round(profit, 2) + round(roi, 2)
+    reasons = [f"预计净利 {profit:g} 元、ROI {roi:g}%"]
 
     if record.get("seller_type") == "personal":
         score += 10
@@ -140,15 +143,19 @@ def draft_path(day: str, record: dict) -> Path:
     return NEGOTIATION_DIR / f"{day}-{slugify_model(record['model'])}-{record['id']}.md"
 
 
-def draft_text(record: dict, stats: dict, item: dict, trigger: dict) -> str:
+def draft_text(record: dict, stats: dict, item: dict, trigger: dict, decision: dict) -> str:
     price = float(record["listing_price"])
+    result = decision.get("policy") or {}
     p25 = float(stats.get("p25") or item["good_price_line"])
     p75 = float(stats.get("p75") or item["reference_price"]["max"])
-    median = float(stats.get("personal_median") or stats.get("overall_median") or price)
     first_offer = max(1, round(price * (1 - float(trigger["first_offer_discount_pct"]) / 100)))
-    estimated_low = round(median * 0.85)
-    estimated_high = round(median * 0.95)
-    score, reasons = priority_score(record, stats, float(item["good_price_line"]))
+    max_buy_price = float(result.get("max_buy_price") or price)
+    target_price = max(1, round(min(price, max_buy_price)))
+    first_offer = max(1, min(first_offer, target_price))
+    exit_price = float(result.get("expected_exit_price") or 0)
+    estimated_low = max(0, round(exit_price))
+    estimated_high = max(estimated_low, round(float(stats.get("p75") or exit_price)))
+    score, reasons = priority_score(record, result)
     now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     title = f"# 谈价记录：{record['model']}\n"
     fields = [
@@ -159,15 +166,22 @@ def draft_text(record: dict, stats: dict, item: dict, trigger: dict) -> str:
         f"- 卖家类型：{record.get('seller_type', 'unknown')}",
         f"- 地区：{record.get('region', '未知')}",
         f"- 当前挂牌价：{price:g} 元",
-        "- 邮费：待确认",
+        f"- 邮费：{result.get('shipping_note', '待确认')}",
         "- 商品状态：待实时复核",
         f"- 成色与配件：{record.get('condition', '未知')}；{record.get('notes', '')}".rstrip("；"),
         f"- 市场样本：{stats.get('sample_count', 0)} 条，跨度 {stats.get('time_span_days', 0)} 天",
         f"- 市场参考价：P25 {p25:g} 元，P75 {p75:g} 元",
         f"- 估算合理成交价：{estimated_low}–{estimated_high} 元",
+        "- 购买模式：可盈利转卖",
+        f"- 全包买入成本：{result.get('landed_buy_cost', price):g} 元",
+        f"- 预计卖出价：{exit_price:g} 元（置信度：{result.get('exit_confidence', 'unknown')}）",
+        f"- 卖出成本：快递 {result.get('shipping_out', 0):g} 元 + 包材 {result.get('packaging', 0):g} 元 + 平台费 {result.get('platform_fee', 0):g} 元",
+        f"- 风险准备金：{result.get('risk_reserve', 0):g} 元",
+        f"- 预计净利润：{result.get('expected_profit', 0):g} 元",
+        f"- 预计 ROI：{result.get('roi_pct', 0):g}%",
         f"- 首报：{first_offer} 元（待复核后调整）",
-        f"- 目标价：{first_offer} 元",
-        f"- 最高可接受价：{price:g} 元",
+        f"- 目标价：{target_price} 元",
+        f"- 最高可接受价：{max(0, max_buy_price):g} 元",
         "- 谈价状态：draft",
         f"- 最后检查时间：{now}",
         "- 最后我方消息：无",
@@ -186,7 +200,10 @@ def draft_text(record: dict, stats: dict, item: dict, trigger: dict) -> str:
         "## 触发评审",
         "",
         f"- 市场门槛：{stats.get('status', 'insufficient')}",
-        f"- 好价线：{item['good_price_line']:g} 元",
+        f"- 购买模式：{result.get('mode', '可盈利转卖')}",
+        f"- 预计净利润：{result.get('expected_profit', 0):g} 元",
+        f"- 预计 ROI：{result.get('roi_pct', 0):g}%",
+        f"- 退出价基准：{result.get('exit_source', 'unknown')}，置信度 {result.get('exit_confidence', 'unknown')}",
         f"- 原始标题：{record.get('title', '')}",
         "",
         "## 只读复核",
@@ -217,6 +234,7 @@ def evaluate(day: str, trigger: dict) -> dict:
     pricing = load_pricing()
     stats_by_model = load_stats()
     negotiations = read_negotiations()
+    policy_config = acquisition_policy.load_policy_config()
 
     existing_ids = {str(item["id"]) for item in negotiations}
     active = [
@@ -259,23 +277,38 @@ def evaluate(day: str, trigger: dict) -> dict:
             decisions.append({"id": listing_id, "model": model, "action": "reject", "reason": rejected})
             continue
 
-        price = float(record["listing_price"])
-        good_line = float(pricing_item["good_price_line"])
-        p25 = float(stats.get("p25") or good_line)
-        base = min(good_line, p25)
-        discount = (base - price) / base * 100 if base else 0
-        if price > good_line and discount < float(trigger["minimum_discount_pct"]):
+        result = acquisition_policy.evaluate(record, stats, policy_config)
+        if not result.get("eligible"):
             decisions.append(
                 {
                     "id": listing_id,
                     "model": model,
                     "action": "watch",
-                    "reason": f"价格未达到好价线或最低折让，当前折让 {discount:.1f}%",
+                    "reason": result.get("reason", "未达到盈利门槛"),
+                    "policy": result,
                 }
             )
             continue
 
-        score, reasons = priority_score(record, stats, good_line)
+        min_confidence = str(
+            acquisition_policy.mode_config(policy_config).get(
+                "auto_trigger_min_confidence",
+                "high",
+            )
+        )
+        if result.get("exit_confidence") == "low" and min_confidence not in {"low", "any"}:
+            decisions.append(
+                {
+                    "id": listing_id,
+                    "model": model,
+                    "action": "watch",
+                    "reason": f"退出价仅估算（低置信度），需人工复核；{result['reason']}",
+                    "policy": result,
+                }
+            )
+            continue
+
+        score, reasons = priority_score(record, result)
         tier = str(pricing_item.get("risk_tier", "high"))
         tier_limit = int(trigger["active_slots"].get(tier, 1))
         model_limit = int(trigger["same_model_slots"].get(tier, 1))
@@ -295,6 +328,7 @@ def evaluate(day: str, trigger: dict) -> dict:
                 "record": record,
                 "stats": stats,
                 "pricing_item": pricing_item,
+                "policy": result,
             }
         )
 
@@ -324,6 +358,7 @@ def evaluate(day: str, trigger: dict) -> dict:
     return {
         "date": day,
         "generated_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        "mode": acquisition_policy.active_mode(policy_config),
         "active_count": len(active),
         "decisions": decisions,
         "immediate_ids": [item["id"] for item in selected],
@@ -362,7 +397,10 @@ def main() -> int:
             stats = stats_by_model[item["model"]]
             path = draft_path(args.date, record)
             if not path.exists():
-                path.write_text(draft_text(record, stats, item, trigger), encoding="utf-8")
+                path.write_text(
+                    draft_text(record, stats, item, trigger, decision),
+                    encoding="utf-8",
+                )
                 created.append(str(path))
         write_json(DECISION_DIR / f"{args.date}.json", result)
 
