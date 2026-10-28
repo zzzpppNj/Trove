@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-28 16:20:23",
+  "updated_at": "2026-10-28 16:50:32",
   "total": 8,
   "records": [
     {
@@ -101,8 +101,8 @@
       "first_offer": 144.0,
       "target_price": 144.0,
       "max_price": 155.0,
-      "last_checked": "2026-10-28 16:20:20",
-      "next_follow_up": "2026-10-28 16:50",
+      "last_checked": "2026-10-28 16:50:30",
+      "next_follow_up": "2026-10-28 17:50",
       "follow_up_due": false,
       "last_seller_message": "无",
       "last_seller_message_hash": "无",
@@ -121,7 +121,7 @@
       "max_price": 115.0,
       "last_checked": "2026-10-28 16:06:12",
       "next_follow_up": "2026-10-28 16:35",
-      "follow_up_due": false,
+      "follow_up_due": true,
       "last_seller_message": "卖家已发货；等待买家收货",
       "last_seller_message_hash": "c72f226a41059741",
       "path": "/Users/zhangpeng/Desktop/AgentWorkspace/Trove/records/negotiation/2026-10-28-女神异闻录5-皇家版-1093341062632.md",
@@ -137,8 +137,8 @@
       "first_offer": 112.0,
       "target_price": 112.0,
       "max_price": 120.0,
-      "last_checked": "2026-10-28 16:20:21",
-      "next_follow_up": "2026-10-28 16:50",
+      "last_checked": "2026-10-28 16:50:31",
+      "next_follow_up": "2026-10-28 17:50",
       "follow_up_due": false,
       "last_seller_message": "稍等！马上就来",
       "last_seller_message_hash": "5a410c766cd5eea7",
