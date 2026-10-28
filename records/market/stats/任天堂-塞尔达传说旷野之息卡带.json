@@ -3,13 +3,16 @@
   "model": "塞尔达传说 旷野之息",
   "category": "图书绘本游戏卡带",
   "updated_at": "2026-10-28",
-  "sample_count": 54,
+  "sample_count": 61,
   "time_span_days": 4,
-  "personal_median": 199,
-  "overall_median": 197,
-  "p25": 181.25,
-  "p75": 205,
-  "fair_price_range": [181.25, 205],
+  "personal_median": 195.0,
+  "overall_median": 195.0,
+  "p25": 180.0,
+  "p75": 205.0,
+  "fair_price_range": [
+    180.0,
+    205.0
+  ],
   "status": "ready",
-  "notes": "10月25日至28日累计54条，个人样本49条、个人中位199；安全区样本≥15，解锁谈价；已剔除NS2、DLC与套装样本"
+  "notes": "安全区；样本61条、个人56条、跨度4天（含首尾）；门槛已满足；已按型号排除不匹配/数字版/光盘/打包样本"
 }
