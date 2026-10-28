@@ -25,6 +25,8 @@ description: 用 Codex 的 browser-use（computer-use 的 cua 工具）直接接
 4. 采集：SPA 页面结果异步渲染，`goto` 后要等待再抽取；抽取脚本别把 href 过滤条件写死。
 5. 落盘：把结构化结果按项目 schema 用 `apply_patch` 写入本地文件（如 `records/market/YYYY-MM-DD.json`）。
 
+发送聊天消息时，不能只依赖聊天 URL 已变化。必须从会话列表点击目标卖家，并核对右侧标题、卖家名和商品信息后再输入；SPA 可能保留上一个会话作为当前输入目标。
+
 ## 关键约束
 
 - 不新开页面：同一标签页内用 `tab.goto(url)` 复用页面；不要另起 Playwright 浏览器或 `browser-use open`。

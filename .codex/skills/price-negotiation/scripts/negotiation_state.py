@@ -538,7 +538,7 @@ def cmd_check(args: argparse.Namespace) -> int:
         note=note,
         status=new_status,
         our_message=None,
-        seller_message=args.seller_message,
+        seller_message=args.seller_message or None,
         next_follow_up=args.next_follow_up,
         append_event=bool(events or args.note),
     )
