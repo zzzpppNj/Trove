@@ -1,6 +1,6 @@
 {
-  "updated_at": "2026-10-28 14:20:39",
-  "total": 6,
+  "updated_at": "2026-10-28 14:37:19",
+  "total": 8,
   "records": [
     {
       "id": "1093413139626",
@@ -41,17 +41,17 @@
     {
       "id": "1093803930170",
       "model": "Switch Sports",
-      "status": "awaiting_reply",
+      "status": "unavailable",
       "seller": "淦啥啥都行",
       "current_price": 155.0,
       "first_offer": 142.0,
       "target_price": 142.0,
       "max_price": 155.0,
-      "last_checked": "2026-10-28 13:50:45",
-      "next_follow_up": "2026-10-28 14:50",
+      "last_checked": "2026-10-28 14:35:40",
+      "next_follow_up": "-",
       "follow_up_due": false,
-      "last_seller_message": "在的；啥价",
-      "last_seller_message_hash": "6d7fe9be2635afb5",
+      "last_seller_message": "已经没了",
+      "last_seller_message_hash": "0b62ba8fb714ae12",
       "path": "/Users/zhangpeng/Desktop/AgentWorkspace/Trove/records/negotiation/2026-10-27-sports-1093803930170.md",
       "relative_path": "2026-10-27-sports-1093803930170.md",
       "archived": false
@@ -93,6 +93,24 @@
       "archived": false
     },
     {
+      "id": "1094389526613",
+      "model": "Switch Sports",
+      "status": "awaiting_reply",
+      "seller": "sakan",
+      "current_price": 155.0,
+      "first_offer": 144.0,
+      "target_price": 144.0,
+      "max_price": 155.0,
+      "last_checked": "2026-10-28 14:37:31",
+      "next_follow_up": "2026-10-28 14:50",
+      "follow_up_due": false,
+      "last_seller_message": "无",
+      "last_seller_message_hash": "无",
+      "path": "/Users/zhangpeng/Desktop/AgentWorkspace/Trove/records/negotiation/2026-10-28-Switch-Sports-1094389526613.md",
+      "relative_path": "2026-10-28-Switch-Sports-1094389526613.md",
+      "archived": false
+    },
+    {
       "id": "1093341062632",
       "model": "女神异闻录5 皇家版",
       "status": "negotiating",
@@ -101,13 +119,31 @@
       "first_offer": 115.0,
       "target_price": 115.0,
       "max_price": 115.0,
-      "last_checked": "2026-10-28 14:20:35",
-      "next_follow_up": "2026-10-28 14:35",
+      "last_checked": "2026-10-28 14:35:45",
+      "next_follow_up": "2026-10-28 14:50",
       "follow_up_due": false,
       "last_seller_message": "原盒没有了，我自己装好然后发货；便宜不了了，要不然退了吧；好，那你下单吧；等一下，我再挂一个；好了",
       "last_seller_message_hash": "a239d003bf2bd31d",
       "path": "/Users/zhangpeng/Desktop/AgentWorkspace/Trove/records/negotiation/2026-10-28-女神异闻录5-皇家版-1093341062632.md",
       "relative_path": "2026-10-28-女神异闻录5-皇家版-1093341062632.md",
+      "archived": false
+    },
+    {
+      "id": "1093475379168",
+      "model": "女神异闻录5 皇家版",
+      "status": "awaiting_reply",
+      "seller": "渴望吃到好价谷",
+      "current_price": 120.0,
+      "first_offer": 112.0,
+      "target_price": 112.0,
+      "max_price": 120.0,
+      "last_checked": "2026-10-28 14:37:01",
+      "next_follow_up": "2026-10-28 14:50",
+      "follow_up_due": false,
+      "last_seller_message": "稍等！马上就来",
+      "last_seller_message_hash": "5a410c766cd5eea7",
+      "path": "/Users/zhangpeng/Desktop/AgentWorkspace/Trove/records/negotiation/2026-10-28-女神异闻录5-皇家版-1093475379168.md",
+      "relative_path": "2026-10-28-女神异闻录5-皇家版-1093475379168.md",
       "archived": false
     }
   ]

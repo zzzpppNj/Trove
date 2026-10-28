@@ -1,7 +1,7 @@
 {
   "date": "2026-10-28",
-  "generated_at": "2026-10-28 11:59:41",
-  "active_count": 2,
+  "generated_at": "2026-10-28 14:35:59",
+  "active_count": 1,
   "decisions": [
     {
       "id": "1093576943847",
@@ -81,8 +81,8 @@
       "price": 155.0,
       "score": 14.0,
       "risk_tier": "safe",
-      "action": "backup",
-      "reason": "满足谈价条件但名额已满"
+      "action": "immediate",
+      "reason": "低于参考下限 0.0%；个人卖家；描述含原盒"
     },
     {
       "id": "1095481057654",
@@ -225,8 +225,8 @@
       "price": 120.0,
       "score": 19.84,
       "risk_tier": "safe",
-      "action": "backup",
-      "reason": "满足谈价条件但名额已满"
+      "action": "immediate",
+      "reason": "低于参考下限 1.6%；个人卖家"
     },
     {
       "id": "1095486021552",
@@ -270,11 +270,8 @@
     {
       "id": "1093341062632",
       "model": "女神异闻录5 皇家版",
-      "price": 115.0,
-      "score": 48.43,
-      "risk_tier": "safe",
-      "action": "immediate",
-      "reason": "低于参考下限 5.7%；个人卖家；描述含原盒"
+      "action": "existing",
+      "reason": "已有谈价或归档记录"
     },
     {
       "id": "1095297488335",
@@ -299,6 +296,7 @@
     }
   ],
   "immediate_ids": [
-    "1093341062632"
+    "1093475379168",
+    "1094389526613"
   ]
 }
