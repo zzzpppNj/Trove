@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-28 15:51:13",
+  "updated_at": "2026-10-28 16:06:32",
   "total": 8,
   "records": [
     {
@@ -113,17 +113,17 @@
     {
       "id": "1093341062632",
       "model": "女神异闻录5 皇家版",
-      "status": "negotiating",
+      "status": "completed",
       "seller": "旋律终语",
       "current_price": 115.0,
       "first_offer": 115.0,
       "target_price": 115.0,
       "max_price": 115.0,
-      "last_checked": "2026-10-28 15:36:11",
-      "next_follow_up": "2026-10-28 16:05",
+      "last_checked": "2026-10-28 16:06:12",
+      "next_follow_up": "2026-10-28 16:35",
       "follow_up_due": false,
-      "last_seller_message": "原盒没有了，我自己装好然后发货；便宜不了了，要不然退了吧；好，那你下单吧；等一下，我再挂一个；好了",
-      "last_seller_message_hash": "a239d003bf2bd31d",
+      "last_seller_message": "卖家已发货；等待买家收货",
+      "last_seller_message_hash": "c72f226a41059741",
       "path": "/Users/zhangpeng/Desktop/AgentWorkspace/Trove/records/negotiation/2026-10-28-女神异闻录5-皇家版-1093341062632.md",
       "relative_path": "2026-10-28-女神异闻录5-皇家版-1093341062632.md",
       "archived": false
