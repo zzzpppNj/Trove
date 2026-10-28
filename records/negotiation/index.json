@@ -1,6 +1,6 @@
 {
-  "updated_at": "2026-10-28 16:50:32",
-  "total": 8,
+  "updated_at": "2026-10-28 17:07:02",
+  "total": 9,
   "records": [
     {
       "id": "1093413139626",
@@ -90,6 +90,24 @@
       "last_seller_message_hash": "无",
       "path": "/Users/zhangpeng/Desktop/AgentWorkspace/Trove/records/negotiation/2026-10-27-zelda-1095296101908.md",
       "relative_path": "2026-10-27-zelda-1095296101908.md",
+      "archived": false
+    },
+    {
+      "id": "1086849531837",
+      "model": "Switch Sports",
+      "status": "awaiting_reply",
+      "seller": "又没呵呵呵",
+      "current_price": 140.0,
+      "first_offer": 130.0,
+      "target_price": 130.0,
+      "max_price": 140.0,
+      "last_checked": "2026-10-28 17:07:02",
+      "next_follow_up": "2026-10-28 17:16",
+      "follow_up_due": false,
+      "last_seller_message": "无",
+      "last_seller_message_hash": "无",
+      "path": "/Users/zhangpeng/Desktop/AgentWorkspace/Trove/records/negotiation/2026-10-28-Switch-Sports-1086849531837.md",
+      "relative_path": "2026-10-28-Switch-Sports-1086849531837.md",
       "archived": false
     },
     {

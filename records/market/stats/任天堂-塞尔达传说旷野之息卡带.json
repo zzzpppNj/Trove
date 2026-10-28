@@ -2,14 +2,14 @@
   "brand": "任天堂",
   "model": "塞尔达传说 旷野之息",
   "category": "图书绘本游戏卡带",
-  "updated_at": "2026-10-27",
-  "sample_count": 24,
-  "time_span_days": 3,
-  "personal_median": 187,
-  "overall_median": 187,
-  "p25": 180,
-  "p75": 195,
-  "fair_price_range": [180, 195],
+  "updated_at": "2026-10-28",
+  "sample_count": 54,
+  "time_span_days": 4,
+  "personal_median": 199,
+  "overall_median": 197,
+  "p25": 181.25,
+  "p75": 205,
+  "fair_price_range": [181.25, 205],
   "status": "ready",
-  "notes": "三日累计24条，个人中位187；样本≥15，解锁谈价"
+  "notes": "10月25日至28日累计54条，个人样本49条、个人中位199；安全区样本≥15，解锁谈价；已剔除NS2、DLC与套装样本"
 }
