@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-28 20:06:37",
+  "updated_at": "2026-10-28 20:51:03",
   "total": 9,
   "records": [
     {
@@ -119,8 +119,8 @@
       "first_offer": 144.0,
       "target_price": 144.0,
       "max_price": 155.0,
-      "last_checked": "2026-10-28 19:50:35",
-      "next_follow_up": "2026-10-28 20:50",
+      "last_checked": "2026-10-28 20:50:55",
+      "next_follow_up": "2026-10-28 21:50",
       "follow_up_due": false,
       "last_seller_message": "无",
       "last_seller_message_hash": "无",
@@ -155,8 +155,8 @@
       "first_offer": 112.0,
       "target_price": 112.0,
       "max_price": 120.0,
-      "last_checked": "2026-10-28 19:50:36",
-      "next_follow_up": "2026-10-28 20:50",
+      "last_checked": "2026-10-28 20:50:56",
+      "next_follow_up": "2026-10-28 21:50",
       "follow_up_due": false,
       "last_seller_message": "稍等！马上就来",
       "last_seller_message_hash": "5a410c766cd5eea7",
