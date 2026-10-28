@@ -1,0 +1,304 @@
+{
+  "date": "2026-10-28",
+  "generated_at": "2026-10-28 11:59:41",
+  "active_count": 2,
+  "decisions": [
+    {
+      "id": "1093576943847",
+      "model": "Switch Sports",
+      "action": "watch",
+      "reason": "价格未达到好价线或最低折让，当前折让 -12.5%"
+    },
+    {
+      "id": "1094499618295",
+      "model": "Switch Sports",
+      "action": "watch",
+      "reason": "价格未达到好价线或最低折让，当前折让 -6.5%"
+    },
+    {
+      "id": "1093547919040",
+      "model": "Switch Sports",
+      "price": 158.0,
+      "score": 13.0,
+      "risk_tier": "safe",
+      "action": "backup",
+      "reason": "满足谈价条件但名额已满"
+    },
+    {
+      "id": "1096577136579",
+      "model": "Switch Sports",
+      "action": "watch",
+      "reason": "价格未达到好价线或最低折让，当前折让 -16.1%"
+    },
+    {
+      "id": "1095502633154",
+      "model": "Switch Sports",
+      "action": "watch",
+      "reason": "价格未达到好价线或最低折让，当前折让 -20.0%"
+    },
+    {
+      "id": "1093476907765",
+      "model": "Switch Sports",
+      "price": 158.06,
+      "score": 10.0,
+      "risk_tier": "safe",
+      "action": "backup",
+      "reason": "满足谈价条件但名额已满"
+    },
+    {
+      "id": "1094401482654",
+      "model": "Switch Sports",
+      "price": 160.0,
+      "score": 10.0,
+      "risk_tier": "safe",
+      "action": "backup",
+      "reason": "满足谈价条件但名额已满"
+    },
+    {
+      "id": "1096559216150",
+      "model": "Switch Sports",
+      "action": "watch",
+      "reason": "价格未达到好价线或最低折让，当前折让 -11.0%"
+    },
+    {
+      "id": "1095488825865",
+      "model": "Switch Sports",
+      "price": 160.0,
+      "score": 13.0,
+      "risk_tier": "safe",
+      "action": "backup",
+      "reason": "满足谈价条件但名额已满"
+    },
+    {
+      "id": "1096551324953",
+      "model": "Switch Sports",
+      "action": "watch",
+      "reason": "价格未达到好价线或最低折让，当前折让 -6.5%"
+    },
+    {
+      "id": "1094389526613",
+      "model": "Switch Sports",
+      "price": 155.0,
+      "score": 14.0,
+      "risk_tier": "safe",
+      "action": "backup",
+      "reason": "满足谈价条件但名额已满"
+    },
+    {
+      "id": "1095481057654",
+      "model": "Switch Sports",
+      "action": "watch",
+      "reason": "价格未达到好价线或最低折让，当前折让 -10.3%"
+    },
+    {
+      "id": "1093461515325",
+      "model": "Switch Sports",
+      "action": "watch",
+      "reason": "价格未达到好价线或最低折让，当前折让 -12.9%"
+    },
+    {
+      "id": "1094379854705",
+      "model": "Switch Sports",
+      "action": "watch",
+      "reason": "价格未达到好价线或最低折让，当前折让 -14.8%"
+    },
+    {
+      "id": "1095470577574",
+      "model": "Switch Sports",
+      "price": 159.0,
+      "score": 10.0,
+      "risk_tier": "safe",
+      "action": "backup",
+      "reason": "满足谈价条件但名额已满"
+    },
+    {
+      "id": "1094359502469",
+      "model": "Switch Sports",
+      "action": "watch",
+      "reason": "价格未达到好价线或最低折让，当前折让 -51.5%"
+    },
+    {
+      "id": "1093425211653",
+      "model": "Switch Sports",
+      "action": "watch",
+      "reason": "价格未达到好价线或最低折让，当前折让 -25.2%"
+    },
+    {
+      "id": "1095431769907",
+      "model": "Switch Sports",
+      "action": "watch",
+      "reason": "价格未达到好价线或最低折让，当前折让 -17.4%"
+    },
+    {
+      "id": "1095430245309",
+      "model": "Switch Sports",
+      "action": "watch",
+      "reason": "价格未达到好价线或最低折让，当前折让 -29.0%"
+    },
+    {
+      "id": "1096471516337",
+      "model": "Switch Sports",
+      "action": "watch",
+      "reason": "价格未达到好价线或最低折让，当前折让 -15.5%"
+    },
+    {
+      "id": "1096700456501",
+      "model": "塞尔达传说 旷野之息",
+      "action": "watch",
+      "reason": "价格未达到好价线或最低折让，当前折让 -27.1%"
+    },
+    {
+      "id": "1096697824455",
+      "model": "塞尔达传说 旷野之息",
+      "action": "watch",
+      "reason": "价格未达到好价线或最低折让，当前折让 -17.6%"
+    },
+    {
+      "id": "1094531078114",
+      "model": "塞尔达传说 旷野之息",
+      "action": "watch",
+      "reason": "价格未达到好价线或最低折让，当前折让 -23.5%"
+    },
+    {
+      "id": "1095609005198",
+      "model": "塞尔达传说 旷野之息",
+      "action": "watch",
+      "reason": "价格未达到好价线或最低折让，当前折让 -23.5%"
+    },
+    {
+      "id": "1093579611942",
+      "model": "塞尔达传说 旷野之息",
+      "action": "watch",
+      "reason": "价格未达到好价线或最低折让，当前折让 -23.5%"
+    },
+    {
+      "id": "1095596102000",
+      "model": "塞尔达传说 旷野之息",
+      "action": "watch",
+      "reason": "价格未达到好价线或最低折让，当前折让 -17.1%"
+    },
+    {
+      "id": "1096651796817",
+      "model": "塞尔达传说 旷野之息",
+      "action": "watch",
+      "reason": "价格未达到好价线或最低折让，当前折让 -23.5%"
+    },
+    {
+      "id": "1094489246767",
+      "model": "塞尔达传说 旷野之息",
+      "action": "watch",
+      "reason": "价格未达到好价线或最低折让，当前折让 -45.3%"
+    },
+    {
+      "id": "1094488666495",
+      "model": "塞尔达传说 旷野之息",
+      "action": "watch",
+      "reason": "价格未达到好价线或最低折让，当前折让 -17.6%"
+    },
+    {
+      "id": "1093557063007",
+      "model": "塞尔达传说 旷野之息",
+      "action": "watch",
+      "reason": "价格未达到好价线或最低折让，当前折让 -5.9%"
+    },
+    {
+      "id": "1095576297607",
+      "model": "塞尔达传说 旷野之息",
+      "action": "watch",
+      "reason": "价格未达到好价线或最低折让，当前折让 -18.8%"
+    },
+    {
+      "id": "1093493559041",
+      "model": "塞尔达传说 旷野之息",
+      "action": "watch",
+      "reason": "价格未达到好价线或最低折让，当前折让 -11.8%"
+    },
+    {
+      "id": "1096572868328",
+      "model": "女神异闻录5 皇家版",
+      "action": "watch",
+      "reason": "价格未达到好价线或最低折让，当前折让 -6.6%"
+    },
+    {
+      "id": "1093475379168",
+      "model": "女神异闻录5 皇家版",
+      "price": 120.0,
+      "score": 19.84,
+      "risk_tier": "safe",
+      "action": "backup",
+      "reason": "满足谈价条件但名额已满"
+    },
+    {
+      "id": "1095486021552",
+      "model": "女神异闻录5 皇家版",
+      "price": 124.0,
+      "score": 14.0,
+      "risk_tier": "safe",
+      "action": "backup",
+      "reason": "满足谈价条件但名额已满"
+    },
+    {
+      "id": "1094394650007",
+      "model": "女神异闻录5 皇家版",
+      "action": "watch",
+      "reason": "价格未达到好价线或最低折让，当前折让 -3.3%"
+    },
+    {
+      "id": "1092904699745",
+      "model": "女神异闻录5 皇家版",
+      "action": "watch",
+      "reason": "价格未达到好价线或最低折让，当前折让 -10.7%"
+    },
+    {
+      "id": "1095757108678",
+      "model": "女神异闻录5 皇家版",
+      "action": "watch",
+      "reason": "价格未达到好价线或最低折让，当前折让 -23.0%"
+    },
+    {
+      "id": "1092670855137",
+      "model": "女神异闻录5 皇家版",
+      "action": "watch",
+      "reason": "价格未达到好价线或最低折让，当前折让 -10.7%"
+    },
+    {
+      "id": "1094659313832",
+      "model": "女神异闻录5 皇家版",
+      "action": "watch",
+      "reason": "价格未达到好价线或最低折让，当前折让 -6.6%"
+    },
+    {
+      "id": "1093341062632",
+      "model": "女神异闻录5 皇家版",
+      "price": 115.0,
+      "score": 48.43,
+      "risk_tier": "safe",
+      "action": "immediate",
+      "reason": "低于参考下限 5.7%；个人卖家；描述含原盒"
+    },
+    {
+      "id": "1095297488335",
+      "model": "女神异闻录5 皇家版",
+      "action": "watch",
+      "reason": "价格未达到好价线或最低折让，当前折让 -6.6%"
+    },
+    {
+      "id": "1094095857303",
+      "model": "女神异闻录5 皇家版",
+      "price": 120.0,
+      "score": 19.84,
+      "risk_tier": "safe",
+      "action": "backup",
+      "reason": "满足谈价条件但名额已满"
+    },
+    {
+      "id": "1092072519901",
+      "model": "女神异闻录5 皇家版",
+      "action": "watch",
+      "reason": "价格未达到好价线或最低折让，当前折让 -13.9%"
+    }
+  ],
+  "immediate_ids": [
+    "1093341062632"
+  ]
+}
