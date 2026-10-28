@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-28 10:50:21",
+  "updated_at": "2026-10-28 11:20:31",
   "total": 5,
   "records": [
     {
@@ -29,8 +29,8 @@
       "first_offer": 115.0,
       "target_price": 115.0,
       "max_price": 125.0,
-      "last_checked": "2026-10-28 10:50:15",
-      "next_follow_up": "2026-10-28 11:20",
+      "last_checked": "2026-10-28 11:20:25",
+      "next_follow_up": "2026-10-28 11:50",
       "follow_up_due": false,
       "last_seller_message": "在的；价格是已经最低",
       "last_seller_message_hash": "bc790f901a4750e2",
@@ -47,8 +47,8 @@
       "first_offer": 142.0,
       "target_price": 142.0,
       "max_price": 155.0,
-      "last_checked": "2026-10-28 10:50:16",
-      "next_follow_up": "2026-10-28 11:20",
+      "last_checked": "2026-10-28 11:20:26",
+      "next_follow_up": "2026-10-28 11:50",
       "follow_up_due": false,
       "last_seller_message": "在的；啥价",
       "last_seller_message_hash": "6d7fe9be2635afb5",
